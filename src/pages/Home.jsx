@@ -39,7 +39,7 @@ function Home() {
 				Challenge yourself with exciting quizzes on various topics. Dive in and
 				explore!
 			</p>
-			<Button onClick={() => navigate('/quizzapp')}>Start Quizzing</Button>
+			<Button onClick={() => navigate('/chooseQuizz')}>Start Quizzing</Button>
 		</HomeContainer>
 	);
 }

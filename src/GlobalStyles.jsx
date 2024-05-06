@@ -4,25 +4,28 @@ export const GlobalStyles = createGlobalStyle`
   :root {
     --font-display: 'Oswald', sans-serif;
     --font-body: 'Open Sans', sans-serif;
+    --color-white : #fff;
   
  
 
  [data-theme="dark"] {
-     --color-primary:#040625; 
+    --color-primary:#040625; 
     --color-secondary : #040710; 
-      --color-accent: #fca605; 
+    --color-accent: #fca605; 
     --color-neutral: #ebebeb; 
-        --color-neutral-2: #111;
+    --color-neutral-2: #111;
+    --color-bg-option-box: #0d1029;
     
     --bg-gradient: radial-gradient(at right center, var(--color-secondary), var(--color-primary));
  }
 
  [data-theme="light"] {
-     --color-primary:#9A9EFF; 
+    --color-primary:#9A9EFF; 
     --color-secondary : #D5DDF8; 
-     --color-accent: #470681; 
+    --color-accent: #470681; 
     --color-neutral: #111; 
-     --color-neutral-2: #fff;
+    --color-neutral-2: #f7f7f7;
+    --color-bg-option-box:#3b3d67;
 
     --bg-gradient: radial-gradient(at right center, var(--color-secondary), var(--color-primary));
  }
@@ -54,4 +57,7 @@ export const GlobalStyles = createGlobalStyle`
     font-family: var(--font-display);
   }
 
+  button {
+    font:inherit
+  }
 `;

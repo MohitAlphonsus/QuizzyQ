@@ -1,4 +1,5 @@
 import { FaBookOpenReader, FaFilm, FaFlask, FaBowlFood } from 'react-icons/fa6';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const quizzOptions = [
@@ -35,10 +36,11 @@ const QuizzOptionBox = styled.div`
 `;
 
 function QuizzOptions() {
+	const navigate = useNavigate();
 	return (
 		<QuizzOptionContainer>
 			{quizzOptions.map(({ id, option, icon: Icon }) => (
-				<QuizzOptionBox key={id}>
+				<QuizzOptionBox key={id} onClick={() => navigate('/quizzapp')}>
 					<Icon className="quizz-icon" />
 					<span>{option}</span>
 				</QuizzOptionBox>

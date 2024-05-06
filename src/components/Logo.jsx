@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const LogoText = styled.p`
@@ -12,8 +13,9 @@ const LogoText = styled.p`
 `;
 
 function Logo() {
+	const navigate = useNavigate();
 	return (
-		<LogoText>
+		<LogoText onClick={() => navigate('/')}>
 			Quizzy<span>Q</span>
 		</LogoText>
 	);
