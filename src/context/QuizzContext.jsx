@@ -9,6 +9,7 @@ const initialState = {
 	index: 0,
 	amswer: null,
 	points: 0,
+	highscore: 0,
 };
 
 function reducer(state, action) {
@@ -44,6 +45,15 @@ function reducer(state, action) {
 				index: state.index + 1,
 				answer: null,
 			};
+		case 'finish':
+			return {
+				...state,
+				status: 'finished',
+				highscore:
+					state.points > state.highscore ? state.points : state.highscore,
+			};
+		case 'restart':
+			return { ...initialState, status: 'ready' };
 		default:
 			throw new Error('Unknown Action');
 	}
@@ -52,18 +62,27 @@ function reducer(state, action) {
 const QuizzContext = createContext();
 
 function QuizzProvider({ children }) {
-	const [{ status, questions, index, answer }, dispatch] = useReducer(
-		reducer,
-		initialState,
-	);
+	const [{ status, questions, index, points, highscore, answer }, dispatch] =
+		useReducer(reducer, initialState);
 
 	useEffect(function () {
 		dispatch({ type: 'dataRecieved', payload: questionsData });
 	}, []);
 
+	const maxPoints = questions.reduce((prev, curr) => prev + curr.points, 0);
+
 	return (
 		<QuizzContext.Provider
-			value={{ status, questions, index, answer, dispatch }}
+			value={{
+				status,
+				questions,
+				index,
+				answer,
+				points,
+				maxPoints,
+				highscore,
+				dispatch,
+			}}
 		>
 			{children}
 		</QuizzContext.Provider>

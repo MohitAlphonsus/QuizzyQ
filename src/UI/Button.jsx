@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const Btn = styled.button`
 	border: none;
@@ -7,12 +7,28 @@ const Btn = styled.button`
 	font-weight: 700;
 	border-radius: 0.8rem;
 	cursor: pointer;
-	background-color: var(--color-accent);
-	color: var(--color-neutral-2);
+	${props => {
+		switch (props.$type) {
+			case 'secondary':
+				return css`
+					background-color: var(--color-neutral);
+					color: var(--color-primary);
+				`;
+			default:
+				return css`
+					background-color: var(--color-accent);
+					color: var(--color-neutral-2);
+				`;
+		}
+	}}
 `;
 
-function Button({ children, onClick }) {
-	return <Btn onClick={onClick}>{children}</Btn>;
+function Button({ children, onClick, $type }) {
+	return (
+		<Btn onClick={onClick} $type={$type}>
+			{children}
+		</Btn>
+	);
 }
 
 export default Button;

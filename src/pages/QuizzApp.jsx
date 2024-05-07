@@ -1,5 +1,5 @@
 import { useQuizzContext } from '../context/QuizzContext';
-import { Question, StartScreen } from '../components';
+import { Question, StartScreen, FinishedScreen } from '../components';
 
 export default function QuizzApp() {
 	const { status } = useQuizzContext();
@@ -8,6 +8,7 @@ export default function QuizzApp() {
 		<>
 			{status === 'ready' && <StartScreen />}
 			{status === 'active' && <Question />}
+			{status === 'finished' && <FinishedScreen />}
 		</>
 	);
 }

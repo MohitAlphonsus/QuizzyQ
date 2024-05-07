@@ -107,6 +107,16 @@ function Question() {
 	const numOfQuestions = questions.length;
 	const questionNumber = index + 1;
 
+	const nextQuestionHandler = () => {
+		if (index < numOfQuestions - 1) {
+			dispatch({ type: 'nextQuestion' });
+			setHasAnswered(false);
+		}
+		if (index === numOfQuestions - 1) {
+			dispatch({ type: 'finish' });
+		}
+	};
+
 	return (
 		<QuizzQuestionContainer>
 			<QuestionHeader>
@@ -139,13 +149,8 @@ function Question() {
 				))}
 				<div className="next-btn">
 					{hasAnswered && (
-						<Button
-							onClick={() => {
-								dispatch({ type: 'nextQuestion' });
-								setHasAnswered(false);
-							}}
-						>
-							Next
+						<Button onClick={nextQuestionHandler}>
+							{index === numOfQuestions - 1 ? 'Finish' : 'Next'}
 						</Button>
 					)}
 				</div>
@@ -153,5 +158,4 @@ function Question() {
 		</QuizzQuestionContainer>
 	);
 }
-
 export default Question;
