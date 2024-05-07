@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { useQuizzContext } from '../context/QuizzContext';
 import { Option } from '../components';
+import { useQuizzContext } from '../context/QuizzContext';
+import { useState } from 'react';
 
 const QuizzQuestionContainer = styled.div`
 	height: calc(100dvh - 7rem);
@@ -42,48 +43,50 @@ const OptionsContainer = styled.div`
 		font-weight: 600;
 		border: 1px solid transparent;
 		cursor: pointer;
-		transition: background-color 0.3s ease-in-out;
+		transition: all 0.3s ease-in-out;
+		background-color: var(--color-bg-option-box);
+		color: var(--color-white);
+	}
 
-		&:disabled {
-			cursor: not-allowed;
-		}
+	.btn:not(:disabled):hover {
+		background-color: transparent;
+		border: 1px solid var(--color-bg-option-box);
+	}
 
-		.default {
-			background-color: var(--color-bg-option-box);
-			color: var(--color-white);
-		}
+	.btn.active {
+		transform: translateX(2rem);
+		transition: transform 0.3s ease-in-out;
+	}
 
-		&:hover {
-			background-color: transparent;
-			border: 1px solid var(--color-bg-option-box);
-		}
+	.btn.correct {
+		background-color: #6ee7b7;
+		color: #111;
+	}
 
-		&.active {
-			transform: translateX(2rem);
-			transition: transform 0.3s ease-in-out;
-		}
+	.btn.wrong {
+		background-color: #12251d;
+		color: var(--color-white);
+	}
 
-		&.correct {
-			background-color: #6ee7b7;
-			color: #111;
-		}
+	.btn:disabled {
+		cursor: not-allowed;
+	}
 
-		&.wrong {
-			background-color: #12251d;
-			color: var(--color-white);
-		}
-
-		@media (min-width: 43.75em) {
+	@media (min-width: 43.75em) {
+		.btn {
 			width: calc(100% - 40%);
 		}
+	}
 
-		@media (min-width: 65em) {
+	@media (min-width: 65em) {
+		.btn {
 			width: calc(100% - 65%);
 		}
 	}
 `;
 
 function Question() {
+	const [hasAnswered, setHasAnswered] = useState(false);
 	const { questions, index, answer, dispatch } = useQuizzContext();
 	const question = questions[index];
 	const numOfQuestions = questions.length;
@@ -101,13 +104,18 @@ function Question() {
 				{question.options.map((option, optionIndex) => (
 					<Option
 						key={option}
-						disabled={answer !== null}
-						className={`btn default ${
-							optionIndex === answer ? 'active' : ''
-						} ${'some'}`}
-						onClick={() =>
-							dispatch({ type: 'newAnswer', payload: optionIndex })
-						}
+						className={`btn ${optionIndex === answer ? 'active' : ''} ${
+							hasAnswered
+								? optionIndex === question.correctOption
+									? 'correct'
+									: 'wrong'
+								: ''
+						}`}
+						onClick={() => {
+							dispatch({ type: 'newAnswer', payload: optionIndex });
+							setHasAnswered(true);
+						}}
+						isDisabled={hasAnswered}
 					>
 						{option}
 					</Option>
