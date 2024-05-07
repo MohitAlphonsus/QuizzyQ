@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Option } from '../components';
+import { Button } from '../UI';
 import { useQuizzContext } from '../context/QuizzContext';
 import { useState } from 'react';
 
@@ -35,7 +36,8 @@ const OptionsContainer = styled.div`
 	flex-direction: column;
 	gap: 2rem;
 
-	.btn {
+	.btn,
+	.next-btn {
 		padding: 1.6rem;
 		width: calc(100% - 10%);
 		margin: 0 auto;
@@ -44,6 +46,9 @@ const OptionsContainer = styled.div`
 		border: 1px solid transparent;
 		cursor: pointer;
 		transition: all 0.3s ease-in-out;
+	}
+
+	.btn-default {
 		background-color: var(--color-bg-option-box);
 		color: var(--color-white);
 	}
@@ -72,14 +77,24 @@ const OptionsContainer = styled.div`
 		cursor: not-allowed;
 	}
 
+	.next-btn {
+		display: flex;
+		& > * {
+			margin-left: auto;
+			align-self: end;
+		}
+	}
+
 	@media (min-width: 43.75em) {
-		.btn {
+		.btn,
+		.next-btn {
 			width: calc(100% - 40%);
 		}
 	}
 
 	@media (min-width: 65em) {
-		.btn {
+		.btn,
+		.next-btn {
 			width: calc(100% - 65%);
 		}
 	}
@@ -104,7 +119,9 @@ function Question() {
 				{question.options.map((option, optionIndex) => (
 					<Option
 						key={option}
-						className={`btn ${optionIndex === answer ? 'active' : ''} ${
+						className={`btn btn-default ${
+							optionIndex === answer ? 'active' : ''
+						} ${
 							hasAnswered
 								? optionIndex === question.correctOption
 									? 'correct'
@@ -120,6 +137,18 @@ function Question() {
 						{option}
 					</Option>
 				))}
+				<div className="next-btn">
+					{hasAnswered && (
+						<Button
+							onClick={() => {
+								dispatch({ type: 'nextQuestion' });
+								setHasAnswered(false);
+							}}
+						>
+							Next
+						</Button>
+					)}
+				</div>
 			</OptionsContainer>
 		</QuizzQuestionContainer>
 	);
