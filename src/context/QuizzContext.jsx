@@ -1,5 +1,17 @@
-import { useReducer, createContext, useContext, useEffect } from 'react';
-import { questionsData } from '../../data/questions';
+import {
+	useReducer,
+	createContext,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
+
+import {
+	foodieFunFacts,
+	generalKnowledge,
+	movieTrivia,
+	scienceWhizQuiz,
+} from '../../data';
 
 const initialState = {
 	questions: [],
@@ -10,23 +22,33 @@ const initialState = {
 	amswer: null,
 	points: 0,
 	highscore: 0,
+	topic: '',
+	secondsRemained: null,
 };
+
+const SECS_PER_QUESTION = 10;
 
 function reducer(state, action) {
 	switch (action.type) {
 		case 'dataRecieved':
 			return {
 				...state,
-				questions: action.payload,
+				questions: action.payload.questionData,
+				topic: action.payload.topicName,
 				status: 'ready',
 			};
+
 		case 'dataFailed':
 			return {
 				...state,
 				status: 'error',
 			};
 		case 'start':
-			return { ...state, status: 'active' };
+			return {
+				...state,
+				status: 'active',
+				secondsRemained: state.questions.length * SECS_PER_QUESTION,
+			};
 		case 'newAnswer': {
 			const question = state.questions[state.index];
 
@@ -53,7 +75,14 @@ function reducer(state, action) {
 					state.points > state.highscore ? state.points : state.highscore,
 			};
 		case 'restart':
-			return { ...initialState, status: 'ready' };
+			return { ...initialState, status: 'initial' };
+
+		case 'tick':
+			return {
+				...state,
+				secondsRemained: state.secondsRemained - 1,
+				status: state.secondsRemained === 0 ? 'finished' : state.status,
+			};
 		default:
 			throw new Error('Unknown Action');
 	}
@@ -62,14 +91,50 @@ function reducer(state, action) {
 const QuizzContext = createContext();
 
 function QuizzProvider({ children }) {
-	const [{ status, questions, index, points, highscore, answer }, dispatch] =
-		useReducer(reducer, initialState);
+	const [quizzOptionCode, setQuizzOptionCode] = useState(null);
 
-	useEffect(function () {
-		dispatch({ type: 'dataRecieved', payload: questionsData });
-	}, []);
+	const [
+		{
+			status,
+			questions,
+			index,
+			points,
+			highscore,
+			answer,
+			topic,
+			secondsRemained,
+		},
+		dispatch,
+	] = useReducer(reducer, initialState);
 
-	const maxPoints = questions.reduce((prev, curr) => prev + curr.points, 0);
+	useEffect(
+		function () {
+			let questionData;
+			let topicName;
+			if (quizzOptionCode === 'GK') {
+				questionData = generalKnowledge;
+				topicName = 'General Knowledge';
+			} else if (quizzOptionCode === 'MBT') {
+				questionData = movieTrivia;
+				topicName = 'Movie Buff Trivia';
+			} else if (quizzOptionCode === 'SWQ') {
+				questionData = scienceWhizQuiz;
+				topicName = 'Science Whiz Quiz';
+			} else if (quizzOptionCode === 'FFF') {
+				questionData = foodieFunFacts;
+				topicName = 'Foodie Fun Facts';
+			}
+			if (questionData) {
+				dispatch({
+					type: 'dataRecieved',
+					payload: { questionData, topicName },
+				});
+			}
+		},
+		[quizzOptionCode],
+	);
+
+	const maxPoints = questions?.reduce((prev, curr) => prev + curr.points, 0);
 
 	return (
 		<QuizzContext.Provider
@@ -81,6 +146,9 @@ function QuizzProvider({ children }) {
 				points,
 				maxPoints,
 				highscore,
+				setQuizzOptionCode,
+				secondsRemained,
+				topic,
 				dispatch,
 			}}
 		>

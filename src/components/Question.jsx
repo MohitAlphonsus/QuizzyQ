@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Option } from '../components';
+import { Option, Timer } from '../components';
 import { Button } from '../UI';
 import { useQuizzContext } from '../context/QuizzContext';
 import { useState } from 'react';
@@ -15,10 +15,23 @@ const QuizzQuestionContainer = styled.div`
 const QuestionHeader = styled.header`
 	padding: 4rem 0;
 	border-bottom: 1px solid #111;
+	position: relative;
+
+	.row {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.col {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 1rem;
+	}
 
 	span {
 		display: inline-block;
-		margin-bottom: 2rem;
 		border: 1px solid #303033;
 		padding: 0.5rem 3rem;
 		border-radius: 1rem;
@@ -27,6 +40,7 @@ const QuestionHeader = styled.header`
 	h3 {
 		font-size: 2.6rem;
 		letter-spacing: 0.5px;
+		margin-top: 2rem;
 	}
 `;
 
@@ -56,6 +70,7 @@ const OptionsContainer = styled.div`
 	.btn:not(:disabled):hover {
 		background-color: transparent;
 		border: 1px solid var(--color-bg-option-box);
+		color: var(--color-neutral);
 	}
 
 	.btn.active {
@@ -102,7 +117,7 @@ const OptionsContainer = styled.div`
 
 function Question() {
 	const [hasAnswered, setHasAnswered] = useState(false);
-	const { questions, index, answer, dispatch } = useQuizzContext();
+	const { questions, index, answer, points, dispatch } = useQuizzContext();
 	const question = questions[index];
 	const numOfQuestions = questions.length;
 	const questionNumber = index + 1;
@@ -120,9 +135,15 @@ function Question() {
 	return (
 		<QuizzQuestionContainer>
 			<QuestionHeader>
-				<span>
-					{questionNumber} / {numOfQuestions}
-				</span>
+				<div className="row">
+					<div className="col">
+						<span>
+							{questionNumber} / {numOfQuestions}
+						</span>
+						<span>{points}</span>
+					</div>
+					<Timer />
+				</div>
 				<h3>{question.question}</h3>
 			</QuestionHeader>
 			<OptionsContainer>

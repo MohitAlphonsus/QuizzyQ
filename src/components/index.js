@@ -5,6 +5,7 @@ import StartScreen from './StartScreen';
 import Question from './Question';
 import Option from './Option';
 import FinishedScreen from './FinishedScreen';
+import Timer from './Timer';
 
 export {
 	Logo,
@@ -14,4 +15,5 @@ export {
 	Question,
 	Option,
 	FinishedScreen,
+	Timer,
 };

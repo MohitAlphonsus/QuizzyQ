@@ -6,6 +6,7 @@ const LogoText = styled.p`
 	color: var(--color-neutral);
 	letter-spacing: 1px;
 	font-weight: 600;
+	cursor: pointer;
 
 	span {
 		color: var(--color-accent);

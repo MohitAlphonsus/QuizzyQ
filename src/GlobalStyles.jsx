@@ -15,6 +15,7 @@ export const GlobalStyles = createGlobalStyle`
     --color-neutral: #ebebeb; 
     --color-neutral-2: #111;
     --color-bg-option-box: #0d1029;
+    --color-selection:#fca6052e;
     
     --bg-gradient: radial-gradient(at right center, var(--color-secondary), var(--color-primary));
  }
@@ -25,7 +26,8 @@ export const GlobalStyles = createGlobalStyle`
     --color-accent: #470681; 
     --color-neutral: #111; 
     --color-neutral-2: #f7f7f7;
-    --color-bg-option-box:#3b3d67;
+    --color-bg-option-box:#2e3067;
+    --color-selection:#47068133;
 
     --bg-gradient: radial-gradient(at right center, var(--color-secondary), var(--color-primary));
  }
@@ -36,7 +38,10 @@ export const GlobalStyles = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     scrollbar-width: none;
+  }
 
+  ::selection {
+    background: var(--color-selection);
   }
 
   html {font-size:62.5%;    overflow-x: hidden;}

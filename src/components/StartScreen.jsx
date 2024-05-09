@@ -7,6 +7,7 @@ const StartScreenContainer = styled.div`
 	height: calc(100dvh - 7rem);
 	display: grid;
 	place-content: center;
+	text-align: center;
 `;
 
 const TextBox = styled.div`
@@ -45,7 +46,7 @@ const ButtonBack = styled.button`
 
 function StartScreen() {
 	const navigate = useNavigate();
-	const { questions, dispatch } = useQuizzContext();
+	const { questions, topic, dispatch } = useQuizzContext();
 	const totalQuestions = questions.length;
 
 	return (
@@ -55,7 +56,7 @@ function StartScreen() {
 					&larr; Choose Different Quizz
 				</ButtonBack>
 				<h2>
-					Welcome to the <span>TOPIC_NAME</span> Quizz!
+					Welcome to the <span>{topic}</span> Quizz!
 				</h2>
 				<p>
 					{totalQuestions} questions to test your knowledge, have a fun
